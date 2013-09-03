@@ -26,8 +26,10 @@
  * - Paolo Di Tommaso <paolo.ditommaso@gmail.com>
  */
 
-params.in = 'example.fa'
-params.out = 'bigampa.txt'
+params.in = 'example.fa'	// input sequences
+params.out = 'bigampa.data'	// result file
+params.t = 0.225			// threshold value 
+params.w = 7				// window size
 
 
 fastaFile = file(params.in)
@@ -48,7 +50,7 @@ task ('ampa') {
 
     // The BASH script to be executed - for each - sequence
     """
-    cat - > input.file && AMPA-BIGTABLE.pl -in=input.file -noplot -rf=result -df=data
+    cat - > input.file && AMPA-BIGTABLE.pl -in=input.file -noplot -rf=result -df=data -t=${params.t} -w=${params.w}
     cat input.file | grep '>' > /dev/stdout
     cat result | grep '#' > /dev/stdout
     """

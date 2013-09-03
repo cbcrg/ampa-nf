@@ -26,8 +26,8 @@ if (($cl=~/-h/) ||($cl=~/-H/) ) {
         print "\n";
         print "Available options:\n";
         print "-in      Fasta sequence input file\n";
-        print "-t       Threshold value (default: 7)\n";
-        print "-w       Window size value (default: 0.225)\n";
+        print "-t       Threshold value (default: 0.225)\n";
+        print "-w       Window size value (default: 7)\n";
         print "-rf      File where store the program result\n";
         print "-gf      File where store the generated plot\n";
         print "-noplot  Skip plot creation step\n";

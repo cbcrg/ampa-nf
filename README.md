@@ -35,25 +35,25 @@ Check the *Pipeline parameters*  section below to see how enter your data on the
 Pipeline parameters
 -------------------
 
-#####in
+#####--in
 
   * The query sequences multi-fasta file (default: example.fa)
   * Example: `nextflow ampa.nf --in /some/path/your-query.fa`
   
   
-#####out
+#####--out
 
   * Path to the file where save the results (default: bigampa.data)
   * Example: `nextflow ampa.nf --out /some/path/your-result.data`
   
   
-#####t
+#####--t
 
   * Threshold value (default: 0.225)
   * Example: `nextflow ampa.nf --t 0.3`  
 
 
-#####w
+#####--w
 
   * Window size value (default: 7)
   * Example: `nextflow ampa.nf --w 8`   

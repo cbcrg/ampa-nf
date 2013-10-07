@@ -11,7 +11,7 @@ Quick start
 
 Clone the git repository on your computer with the following command:
 
-    $ git clone ggit@github.com:cbcrg/ampa-nf.git
+    $ git clone git@github.com:cbcrg/ampa-nf.git
     
 
 Make sure you have installed the dependencies required listed below. 

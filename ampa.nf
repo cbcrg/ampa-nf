@@ -39,18 +39,19 @@ if( !fastaFile.exists() ) {
 seq = channel()
 fastaFile.chunkFasta { seq << it }
 
-ampaOut = channel()
-task ('ampa') {
-
+process ampa {
     //  defines the Input and Output
-    input '-':seq
-    output '-':ampaOut
+    input:
+    stdin seq
+
+    output:
+    stdout ampaOut
 
     // The BASH script to be executed - for each - sequence
     """
-    cat - > input.file && AMPA-BIGTABLE.pl -in=input.file -noplot -rf=result -df=data
-    cat input.file | grep '>' > /dev/stdout
-    cat result | grep '#' > /dev/stdout
+    cat - > input.fa && AMPA-BIGTABLE.pl -in=input.fa -noplot -rf=result -df=data
+    cat input.fa | grep '>' > /dev/stdout
+    cat result | grep '#' >> /dev/stdout
     """
 
 }

@@ -36,41 +36,36 @@ fastaFile = file(params.in)
 if( !fastaFile.exists() ) {
   exit 1, "The specified input file does not exist: ${params.in}"
 }
+log.info "Processing file: $fastaFile"
 
 
-seq = channel()
-fastaFile.chunkFasta { seq << it }
+seq = Channel.readFasta ( fastaFile, record:[head:true, text: true] )
 
 process ampa {
     //  defines the Input and Output
     input:
-    stdin seq
+    set ( head, 'input.fa' ) from seq
 
     output:
-    stdout ampaOut
+    set ( head, stdout ) into ampaOut
 
     // The BASH script to be executed - for each - sequence
     """
-    cat - > input.fa && AMPA-BIGTABLE.pl -in=input.fa -noplot -rf=result -df=data -t=${params.t} -w=${params.w}
-    cat input.fa | grep '>' > /dev/stdout
-    cat result | grep '#' >> /dev/stdout
+    AMPA-BIGTABLE.pl -in=input.fa -noplot -rf=result -df=data -t=${params.t} -w=${params.w}
+    cat result | grep '#' > /dev/stdout
     """
 
 }
 
-def result = file(params.out)
-println "Saving result at: ${result}"
+def result = file(params.out);
+if( result.exists() ) result.delete()
+println "Saving result to file: ${result}"
 
-ampaOut.eachWithIndex { str, index ->
+ampaOut.each { tuple ->
 
-  def lines = str.trim().split('\n')
-  if( lines.size() != 2 ) {
-      println "ERROR > Invalid AMPA ($index) result:\n${str}\n\n"
-      return
-  }
-
-  def id = getIDs(lines[0])
-  def val = getValues(lines[1])
+  def ( head, str ) = tuple
+  def id = getIDs(head)
+  def val = getValues(str.trim())
 
   result << "${id[0]}\t${id[1]}\t${val[0]}\t${val[1]}\t${val[2]}\t${val[3]}\n"
 }
@@ -78,7 +73,7 @@ ampaOut.eachWithIndex { str, index ->
 
 def getIDs( line ) {
 
-  def matcher = line =~ />(\S+).+gene:(\S+).*/
+  def matcher = line =~ /^(\S+).+gene:(\S+).*/
   if( matcher.matches() ) {
     def seqId = matcher[0][1]
     def geneId = matcher[0][2]

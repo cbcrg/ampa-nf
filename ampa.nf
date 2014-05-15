@@ -76,7 +76,9 @@ process ampa {
 /*
  * Collecting AMPA result and saving to a file
  */
-println "Saving result to file: ${params.out}"
+resultFile = file(params.out)
+if( resultFile.exists() ) resultFile.delete()
+println "Saving result to file: ${resultFile}"
 
 ampaOut.map { head, str ->
         def id = getIDs(head)
@@ -84,7 +86,7 @@ ampaOut.map { head, str ->
 
         "${id[0]}\t${id[1]}\t${val[0]}\t${val[1]}\t${val[2]}\t${val[3]}\n"
     }
-    .collectFile( name: params.out )
+    .collectFile( name: resultFile )
 
 
 /*

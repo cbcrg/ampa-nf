@@ -24,6 +24,12 @@
  * Authors: 
  * - Irantzu Anzar <iranmdl15@gmail.com>
  * - Paolo Di Tommaso <paolo.ditommaso@gmail.com>
+ *
+ */
+
+
+/*
+ * Pipeline input params
  */
 
 params.in = 'example.fa'	// input sequences
@@ -32,6 +38,9 @@ params.t = 0.225			// threshold value
 params.w = 7				// window size
 
 
+/*
+ * make sure the input file exists or exit
+ */
 fastaFile = file(params.in)
 if( !fastaFile.exists() ) {
   exit 1, "The specified input file does not exist: ${params.in}"
@@ -39,7 +48,13 @@ if( !fastaFile.exists() ) {
 log.info "Processing file: $fastaFile"
 
 
-seq = Channel.readFasta ( fastaFile, record:[head:true, text: true] )
+/*
+ * split the input fasta in single sequences and execute a AMPA job for it
+ */
+seq = Channel
+            .fromPath(fastaFile)
+            .splitFasta( record: [header:true, text: true] )
+
 
 process ampa {
     //  defines the Input and Output
@@ -57,20 +72,24 @@ process ampa {
 
 }
 
-def result = file(params.out);
-if( result.exists() ) result.delete()
-println "Saving result to file: ${result}"
 
-ampaOut.each { tuple ->
+/*
+ * Collecting AMPA result and saving to a file
+ */
+println "Saving result to file: ${params.out}"
 
-  def ( head, str ) = tuple
-  def id = getIDs(head)
-  def val = getValues(str.trim())
+ampaOut.map { head, str ->
+        def id = getIDs(head)
+        def val = getValues(str.trim())
 
-  result << "${id[0]}\t${id[1]}\t${val[0]}\t${val[1]}\t${val[2]}\t${val[3]}\n"
-}
+        "${id[0]}\t${id[1]}\t${val[0]}\t${val[1]}\t${val[2]}\t${val[3]}\n"
+    }
+    .collectFile( name: params.out )
 
 
+/*
+ * Given the sequence header retrieve the sequence ID
+ */
 def getIDs( line ) {
 
   def matcher = line =~ /^(\S+).+gene:(\S+).*/

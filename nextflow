@@ -74,7 +74,7 @@ if [ "$0" = "bash" ] || [ "$0" = "/bin/bash" ]; then
 fi  
 
 NXF_HOME=${NXF_HOME:-$HOME/.nextflow}
-NXF_VER=${NXF_VER:-'0.8.0'}
+NXF_VER=${NXF_VER:-'0.8.1'}
 
 # Check if it is required to run in background
 bg=''
@@ -110,7 +110,7 @@ NXF_URL=${NXF_URL:-$NXF_BASE/v$NXF_VER/$NXF_JAR}
 
 if [ ! -f "$NXF_BIN" ]; then
     # Check Java version
-    java -version 2>&1 | awk '/version/ {print $3}' | grep '"1\.7\..*"' > /dev/null
+    java -version 2>&1 | awk '/version/ {print $3}' | grep '"1\.[7|8]\..*"' > /dev/null
     if [ $? -ne 0 ]; then
          echo "Error: cannot find Java or it's a wrong version --  please make sure that Java 7 it's installed"
          exit 1

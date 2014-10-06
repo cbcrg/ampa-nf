@@ -32,8 +32,8 @@
  * Pipeline input params
  */
 
-params.in = 'example.fa'	// input sequences
-params.out = 'bigampa.data'	// result file
+params.in = "$baseDir/example.fa" 	// input sequences
+params.out = 'bigampa.data'		// result file
 params.t = 0.225			// threshold value 
 params.w = 7				// window size
 
@@ -78,7 +78,7 @@ process ampa {
  */
 resultFile = file(params.out)
 if( resultFile.exists() ) resultFile.delete()
-println "Saving result to file: ${resultFile}"
+log.info " --> Saving result to file: ${resultFile}"
 
 ampaOut.map { head, str ->
         def id = getIDs(head)

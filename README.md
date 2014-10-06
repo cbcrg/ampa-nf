@@ -9,27 +9,19 @@ antimicrobial patterns in proteins that can be used to develop new peptide-based
 Quick start 
 -----------
 
-Clone the git repository on your computer with the following command:
+Make sure you have installed the dependencies required listed at the end of this document. 
 
-    $ git clone git@github.com:cbcrg/ampa-nf.git
-    
+Install the Nextflow runtime by running the following command: 
 
-Make sure you have installed the dependencies required listed below. 
+    $ curl -fsSL get.nextflow.io | bash
 
 
-When done, move in the project folder named `ampa-nf`, 
-which contains an example dataset file named `example.fa`. 
+When done, you can execute AMPA by entering the command shown below:
 
-Launch the pipeline by entering the following command 
-on your shell terminal:
+    $ ./nextflow run cbcrg/ampa-nf
 
-    $ ./nextflow ampa.nf
-    
 
-By default the pipeline is executed against the provided tutorial dataset and the result is saved into
-a file named `bigampa.data` in the execution folder.
-
-Check the *Pipeline parameters*  section below to see how enter your data on the program command line.    
+By default the pipeline is executed by using a small dataset included with the project. Check the *Pipeline parameters* section below to see how specify your input data on the program command line.
 
 
 Pipeline parameters

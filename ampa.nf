@@ -86,7 +86,7 @@ ampaOut.map { head, str ->
 
         "${id[0]}\t${id[1]}\t${val[0]}\t${val[1]}\t${val[2]}\t${val[3]}\n"
     }
-    .collectFile( name: resultFile )
+    .collectFile( name: resultFile, sort: 'none' )
 
 
 /*

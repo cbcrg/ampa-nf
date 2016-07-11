@@ -6,6 +6,6 @@ machine:
     
 test:
   override:
-    - ./nextflow -download
+    - curl -fsSL get.nextflow.io | bash
     - docker pull cbcrg/ampa-nf
     - ./nextflow run . -with-docker

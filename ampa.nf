@@ -51,18 +51,18 @@ log.info "Processing file: $fastaFile"
 /*
  * split the input fasta in single sequences and execute a AMPA job for it
  */
-seq = Channel
-            .fromPath(fastaFile)
-            .splitFasta( record: [header:true, text: true] )
-
+Channel
+        .fromPath(fastaFile)
+        .splitFasta( record: [header:true, text: true] )
+        .set { seq }
 
 process ampa {
     //  defines the Input and Output
     input:
-    set ( head, 'input.fa' ) from seq
+    set head, 'input.fa' from seq
 
     output:
-    set ( head, stdout ) into ampaOut
+    set head, stdout into ampaOut
 
     // The BASH script to be executed - for each - sequence
     """
